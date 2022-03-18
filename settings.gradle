@@ -5,4 +5,4 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-include ':module'
+include ':zygisk_module'

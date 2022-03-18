@@ -1,8 +1,8 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := example
-LOCAL_SRC_FILES := example.cpp
+LOCAL_MODULE := copycert
+LOCAL_SRC_FILES := module.cpp companion.cpp common.cpp
 LOCAL_STATIC_LIBRARIES := libcxx
 LOCAL_LDLIBS := -llog
 include $(BUILD_SHARED_LIBRARY)

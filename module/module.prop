@@ -1,0 +1,6 @@
+id=copycert
+name=Copy Certificates
+version=v1.0
+versionCode=1
+author=AdGuard
+description=Copies certificates from the user certificate store to the system store and forces Chrome on the Zygisk denylist.
