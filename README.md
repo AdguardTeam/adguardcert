@@ -8,6 +8,11 @@ store.
 
 # Building
 
+Update git modules:
+```
+git submodule init && git submodule update
+```
+
 You'll need Android SDK with NDK v23.1.7779620. Run:
 
 ```shell
