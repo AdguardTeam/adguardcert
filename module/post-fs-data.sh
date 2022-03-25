@@ -1,7 +1,11 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
 
-cp -f /data/misc/user/*/cacerts-added/* $MODDIR/system/etc/security/cacerts
+# Android hashes the subject to get the filename, field order is significant
+# AdGuard certificate is /C=EN/O=AdGuard/CN=AdGuard Personal CA
+# The filename is then <hash>.<n> where <n> is an integer
+AG_CERT_HASH=0f4ed297
+cp -f /data/misc/user/*/cacerts-added/${AG_CERT_HASH}.* $MODDIR/system/etc/security/cacerts
 chown -R 0:0 $MODDIR/system/etc/security/cacerts
 
 [ "$(getenforce)" = "Enforcing" ] || exit 0

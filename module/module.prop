@@ -1,6 +1,6 @@
-id=copycert
-name=Copy Certificates
+id=adguardcert
+name=AdGuard Certificate
 version=v1.0
 versionCode=1
 author=AdGuard
-description=Copies certificates from the user certificate store to the system store and forces Chrome on the Zygisk denylist.
+description=Copies AdGuard's CA certificate from the user certificate store to the system store and forces Zygisk unmount procedures for Chrome.

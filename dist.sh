@@ -30,9 +30,10 @@ curl "${UPDATE_BINARY_URL}" > ./module/META-INF/com/google/android/update-binary
 echo "#MAGISK" > ./module/META-INF/com/google/android/updater-script
 
 VERSION=$(sed -ne "s/version=\(.*\)/\1/gp" ./module/module.prop)
+NAME=$(sed -ne "s/id=\(.*\)/\1/gp" ./module/module.prop)
 
-rm -f CopyCert-${VERSION}.zip
+rm -f ${NAME}-${VERSION}.zip
 (
   cd ./module
-  zip ../CopyCert-${VERSION}.zip -r * -x ".*" "*/.*"
+  zip ../${NAME}-${VERSION}.zip -r * -x ".*" "*/.*"
 )
