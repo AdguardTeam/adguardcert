@@ -12,7 +12,7 @@ same certificate from the system store.
 # Usage
 1. Enable HTTPS filtering and save/install AdGuard's certificate to the user store.
 2. Go to Magisk->Settings and enable Zygisk.
-3. Download the zip file from releases.
+3. Download the zip file from [releases](releases).
 4. Go to Magisk->Modules->Install from storage, and select the downloaded zip file.
 5. Reboot.
 
