@@ -1,4 +1,4 @@
-# Copy Certificates
+# Copy AdGuard Certificate
 
 Based on [Move Certificates](https://github.com/Magisk-Modules-Repo/movecert).
 
