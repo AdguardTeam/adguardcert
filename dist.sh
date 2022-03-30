@@ -14,7 +14,7 @@ fi
 
 NDK_BUILD="${NDK_PATH}/ndk-build"
 
-(cd ./zygisk_module && ${NDK_BUILD}) || exit 1
+(cd ./zygisk_module && ${NDK_BUILD} -j8) || exit 1
 
 mkdir ./module/zygisk
 
