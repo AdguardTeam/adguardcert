@@ -1,12 +1,11 @@
 #!/bin/bash
 
-if [ -z "${ANDROID_SDK}" ]; then
-  echo "Specify the Android SDK directory through the ANDROID_SDK environment variable"
+if [ -z "${ANDROID_HOME}" ]; then
+  echo "Specify the Android SDK directory through the ANDROID_HOME environment variable"
   exit 1
 fi
 
-NDK_VERSION="23.1.7779620"
-NDK_PATH="${ANDROID_SDK}/ndk/${NDK_VERSION}"
+NDK_PATH=$(./ndk_path.py)
 
 if [ ! -d "${NDK_PATH}" ]; then
   echo "NDK version ${NDK_VERSION} is required and was not found at ${NDK_PATH}"
