@@ -25,10 +25,10 @@ Update git modules:
 git submodule init && git submodule update
 ```
 
-You'll need an Android SDK with NDK version 23.1.7779620. Run:
+You'll need an Android SDK with NDK installed (tested with NDK 22 and 23). Run:
 
 ```shell
-ANDROID_SDK=<path-to-android-sdk> ./dist.sh
+ANDROID_HOME=<path-to-android-sdk> ./dist.sh
 ```
 
 # Advanced
