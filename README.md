@@ -23,13 +23,13 @@ Unfortunately, this is only possible on a rooted device.
 
 1. Enable HTTPS filtering and save/install AdGuard's certificate to the user store.
 2. Go to Magisk->Settings and enable Zygisk.
-3. Download the zip file from [latest release](release).
+3. Download the zip file from [latest release](latestrelease).
 4. Go to Magisk->Modules->Install from storage, and select the downloaded zip file.
 5. Reboot.
 
 To update the module if a new version comes out, repeat steps 3-5.
 
-[release]: https://github.com/AdguardTeam/adguardcert/releases/latest/
+[latestrelease]: https://github.com/AdguardTeam/adguardcert/releases/latest/
 
 ## Chrome and Chromium-based browsers
 
