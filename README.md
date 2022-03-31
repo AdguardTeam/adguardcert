@@ -2,12 +2,12 @@
 
 Based on [Move Certificates](https://github.com/Magisk-Modules-Repo/movecert).
 
-This Magisk module supplements [AdGuard for Android](agandroid) and allows installing
+This Magisk module supplements [AdGuard for Android][agandroid] and allows installing
 AdGuard's CA certificate to the system store.
 
 ## Why you could need it?
 
-AdGuard provides a feature called [HTTPS filtering](httpsfiltering). It allows
+AdGuard provides a feature called [HTTPS filtering][httpsfiltering]. It allows
 filtering of encrypted HTTPS traffic on your Android device. This feature requires
 installing the AdGuard's CA certificate to the list of trusted certificates.
 
@@ -23,7 +23,7 @@ Unfortunately, this is only possible on a rooted device.
 
 1. Enable HTTPS filtering and save/install AdGuard's certificate to the user store.
 2. Go to Magisk->Settings and enable Zygisk.
-3. Download the zip file from [latest release](latestrelease).
+3. Download the zip file from [latest release][latestrelease].
 4. Go to Magisk->Modules->Install from storage, and select the downloaded zip file.
 5. Reboot.
 
