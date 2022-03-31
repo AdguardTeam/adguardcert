@@ -3,34 +3,34 @@
 Based on [Move Certificates](https://github.com/Magisk-Modules-Repo/movecert).
 
 This Magisk module supplements [AdGuard for Android][agandroid] and allows installing
-AdGuard's CA certificate to the system store.
+AdGuard's CA certificate to the System store on rooted devices.
 
-## Why you could need it?
+## Why could you need it?
 
-AdGuard provides a feature called [HTTPS filtering][httpsfiltering]. It allows
+AdGuard for Android provides a feature called [HTTPS filtering][httpsfiltering]. It allows
 filtering of encrypted HTTPS traffic on your Android device. This feature requires
-installing the AdGuard's CA certificate to the list of trusted certificates.
+adding the AdGuard's CA certificate to the list of trusted certificates.
 
-By default on a non-rooted device only a limited subset of apps (mostly, browsers)
-trust the CA certificate installed to the "User store". The only option to allow
-filtering of all apps is to install the certificate to the "System store".
-Unfortunately, this is only possible on a rooted device.
+By default, on a non-rooted device only a limited subset of apps (mostly, browsers)
+trust the CA certificates installed to the **User store**. The only option to allow
+filtering of all other apps' traffic is to install the certificate to the **System store**.
+Unfortunately, this is only possible on rooted devices.
 
 [agandroid]: https://adguard.com/adguard-android/overview.html
 [httpsfiltering]: https://kb.adguard.com/general/https-filtering
 
 ## Usage
 
-1. Enable HTTPS filtering and save/install AdGuard's certificate to the user store.
-2. Go to Magisk->Settings and enable Zygisk.
-3. Download the zip file from [latest release][latestrelease].
-4. Go to Magisk->Modules->Install from storage, and select the downloaded zip file.
+1. Enable HTTPS filtering in AdGuard for Android and save AdGuard's certificate to the User store.
+2. Go to *Magisk -> Settings* and enable **Zygisk**.
+3. Download the `.zip` file from the [latest release][latestrelease].
+4. Go to *Magisk -> Modules -> Install from storage* and select the downloaded `.zip` file.
 5. Reboot.
 
-To update the module if a new version comes out, repeat steps 3-5.
+If a new version comes out, repeat steps 3-5 to update the module.
 
 <details>
-    <summary>Illustrated instruction of how to use this module</summary>
+    <summary>Illustrated instruction</summary>
 
 ![Open Magisk settings](https://user-images.githubusercontent.com/5947035/161061257-680c784b-b476-432d-8dfd-2528fe239346.png)
 
@@ -53,12 +53,12 @@ To update the module if a new version comes out, repeat steps 3-5.
 
 ## Chrome and Chromium-based browsers
 
-Chrome recently started requiring CT logs for CA certs found in the "System store".
-This module copies AdGuard's CA certificate from the "User store" to the "System store".
+Chrome has recently started requiring CT logs for CA certs found in the **System store**.
+This module copies AdGuard's CA certificate from the **User store** to the **System store**.
 It also contains a Zygisk module that reverts any modifications done by Magisk for
-Chrome's processes. This way Chrome only finds AdGuard's certificate in the user store
+Chrome's processes. This way Chrome only finds AdGuard's certificate in the User store
 and doesn't complain about the missing CT log, while other apps continue to use the
-same certificate from the system store.
+same certificate from the System store.
 
 ## Building
 
