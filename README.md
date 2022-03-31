@@ -17,7 +17,7 @@ filtering of all apps is to install the certificate to the "System store".
 Unfortunately, this is only possible on a rooted device.
 
 [agandroid]: https://adguard.com/adguard-android/overview.html
-[httpsfiltering]: https://kb.adguard.com/en/general/https-filtering
+[httpsfiltering]: https://kb.adguard.com/general/https-filtering
 
 ## Usage
 
@@ -28,6 +28,26 @@ Unfortunately, this is only possible on a rooted device.
 5. Reboot.
 
 To update the module if a new version comes out, repeat steps 3-5.
+
+<details>
+    <summary>Illustrated instruction of how to use this module</summary>
+
+![Open Magisk settings](https://user-images.githubusercontent.com/5947035/161061257-680c784b-b476-432d-8dfd-2528fe239346.png)
+
+![Enable Zygisk](https://user-images.githubusercontent.com/5947035/161061268-3367d668-cbbd-441d-9e6d-a4cbc3978b3e.png)
+
+![Go back to Magisk main screen](https://user-images.githubusercontent.com/5947035/161061273-329e3f8a-c957-4005-a8f7-2056b1866b08.png)
+
+![Open Magisk modules](https://user-images.githubusercontent.com/5947035/161061277-1ada3a87-d0cb-44c0-9edd-77b00669759c.png)
+
+![Install from storage](https://user-images.githubusercontent.com/5947035/161061283-8e3d6ed2-ca36-4825-bca4-fbb9f9185f68.png)
+
+![Select AdGuard certificate module](https://user-images.githubusercontent.com/5947035/161061285-4ea302ad-99ec-4619-be05-3b83f64b9e4f.png)
+
+![Reboot the device](https://user-images.githubusercontent.com/5947035/161061291-54ad008f-4c76-4ee3-975d-307fd0fe7220.png)
+
+</details>
+
 
 [latestrelease]: https://github.com/AdguardTeam/adguardcert/releases/latest/
 
