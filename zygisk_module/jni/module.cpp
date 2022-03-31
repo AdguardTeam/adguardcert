@@ -1,16 +1,13 @@
 #include <string>
-#include <algorithm>
+#include <unordered_set>
 
 #include <unistd.h>
 
 #include "common.h"
 #include "zygisk.hpp"
 
-static const std::string PACKAGES_TO_UNMOUNT[] = {
-        "com.android.chrome",
-        "com.chrome.canary",
-        "com.chrome.beta",
-        "com.chrome.dev",
+static const std::unordered_set<std::string> PACKAGES_TO_UNMOUNT = {
+#include "browsers.inc"
 };
 
 class MyModule : public zygisk::ModuleBase {
@@ -28,8 +25,7 @@ public:
         }
         ag::write_int(fd, args->uid);
         std::string package = ag::read_string(fd);
-        if (std::any_of(std::begin(PACKAGES_TO_UNMOUNT), std::end(PACKAGES_TO_UNMOUNT),
-                        [&](const std::string &pkg) { return pkg == package; })) {
+        if (PACKAGES_TO_UNMOUNT.count(package)) {
             dbglog("Forcing denylist unmount routines for package: %s", package.c_str());
             api->setOption(zygisk::Option::FORCE_DENYLIST_UNMOUNT);
         }
