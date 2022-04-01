@@ -35,3 +35,4 @@ jobs:
           generate_release_notes: true
           files: adguardcert-*.zip
           draft: true
+          name: test
