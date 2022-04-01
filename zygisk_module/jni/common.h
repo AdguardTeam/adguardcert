@@ -7,7 +7,7 @@
 
 #include <android/log.h>
 
-#define LOG_TAG "CopyCertificates"
+#define LOG_TAG "AdGuardCertificate"
 
 #ifndef NDEBUG
 #define dbglog(fmt_, ...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s(): " fmt_, __func__, ##__VA_ARGS__)
