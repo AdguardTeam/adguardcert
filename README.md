@@ -53,7 +53,7 @@ If a new version comes out, repeat steps 3-5 to update the module.
 
 ## Chrome and Chromium-based browsers
 
-Chrome (and eventually many other Chromium-based browsers)
+Chrome (and subsequently many other Chromium-based browsers)
 has recently started requiring CT logs for CA certs found in the **System store**.
 This module copies AdGuard's CA certificate from the **User store** to the **System store**.
 It also contains a Zygisk module that reverts any modifications done by Magisk for
