@@ -31,6 +31,8 @@ jobs:
       - name: create release
         # if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           generate_release_notes: true
           files: adguardcert-*.zip
