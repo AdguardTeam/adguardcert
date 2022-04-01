@@ -33,5 +33,6 @@ jobs:
         with:
           artifacts: "adguardcert-*.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
+          tag: testtag
           generateReleaseNotes: true
           draft: true
