@@ -74,6 +74,10 @@ You'll need an Android SDK with NDK installed (tested with NDK 22 and 23). Run:
 ANDROID_HOME=<path-to-android-sdk> ./dist.sh
 ```
 
+How to release a new version:
+1. Push a new tag with a name like `v*`.
+2. A new release will be automatically created.
+
 ## Advanced
 
 If you prefer to manage your Zygisk denylist yourself, simply remove the Zygisk part of the module:
