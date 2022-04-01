@@ -22,4 +22,7 @@ jobs:
           add-to-path: true
 
       - name: build dist
-        run: ./dist.sh
+        run: |
+          git submodule init && git submodule update
+          ./dist.sh
+          ls -la
