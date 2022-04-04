@@ -29,7 +29,7 @@ Unfortunately, this is only possible on rooted devices.
 
 If a new version comes out, repeat steps 3-5 to update the module.
 
-Note that if you use **Bromite** browser, user certificates should be implicitly allowed in `chrome://flags`.
+Please note that in order for **Bromite** browser to work properly, you need to set flag "Allow user certificates" in `chrome://flags` to "Enabled" state.
 
 <details>
     <summary>Illustrated instruction</summary>
@@ -50,6 +50,12 @@ Note that if you use **Bromite** browser, user certificates should be implicitly
 
 </details>
 
+<details>
+    <summary>Bromite setup</summary>
+    
+![Allow user certificates flag](https://i.imgur.com/MtLJ88p.jpg)
+
+</details>
 
 [latestrelease]: https://github.com/AdguardTeam/adguardcert/releases/latest/
 
