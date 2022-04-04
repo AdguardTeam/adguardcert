@@ -29,6 +29,8 @@ Unfortunately, this is only possible on rooted devices.
 
 If a new version comes out, repeat steps 3-5 to update the module.
 
+Note that if you use **Bromite** browser, user certificates should be implicitly allowed in `chrome://flags`.
+
 <details>
     <summary>Illustrated instruction</summary>
 
