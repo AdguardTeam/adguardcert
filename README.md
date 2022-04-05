@@ -48,6 +48,14 @@ If a new version comes out, repeat steps 3-5 to update the module.
 
 </details>
 
+Please note that in order for **Bromite** browser to work properly, you need to set flag "Allow user certificates" in `chrome://flags` to "Enabled" state.
+
+<details>
+    <summary>Bromite setup</summary>
+    
+![Allow user certificates flag](https://user-images.githubusercontent.com/47204/161606690-0e44211a-abd6-4e89-91b0-f012e68294df.png)
+
+</details>
 
 [latestrelease]: https://github.com/AdguardTeam/adguardcert/releases/latest/
 
