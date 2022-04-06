@@ -45,3 +45,4 @@
 "com.stoutner.privacybrowser.free",
 "com.stoutner.privacybrowser.standard",
 "com.naver.whale",
+"us.spotco.mulch",
