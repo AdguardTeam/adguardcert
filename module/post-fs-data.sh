@@ -2,14 +2,18 @@
 MODDIR=${0%/*}
 
 # Android hashes the subject to get the filename, field order is significant.
-# AdGuard certificate is "/C=EN/O=AdGuard/CN=AdGuard Personal CA".
+# AdGuard's certificate is "/C=EN/O=AdGuard/CN=AdGuard Personal CA".
 # The filename is then <hash>.<n> where <n> is an integer to disambiguate
-# different certs with the same hash (e.g. when the same cert is installed repeteadly).
+# different certs with the same hash (e.g. when the same cert is installed repeatedly).
 #
 # Due to https://github.com/AdguardTeam/AdguardForAndroid/issues/2108
 # 1. Take the last cert with our hash from the user store.
+#    Assuming the last installed AdGuard's cert is the correct one.
 # 2. Copy it to the system store under the name "<hash>.0".
-# 3. Remove the copied cert from `cacerts-removed`.
+#    Apparently, some apps may ignore other certs.
+# 3. Remove the "<hash>.0" cert from the `cacerts-removed` directory.
+#    It might get there if it's "unchecked" in the security settings.
+#    Apps will reject certs that are in the `cacerts-removed`.
 AG_CERT_HASH=0f4ed297
 AG_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_CERT_HASH}.* | sort | tail -n1)
 cp -f ${AG_CERT_FILE} ${MODDIR}/system/etc/security/cacerts/${AG_CERT_HASH}.0
