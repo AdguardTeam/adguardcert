@@ -29,6 +29,9 @@ Unfortunately, this is only possible on rooted devices.
 
 If a new version comes out, repeat steps 3-5 to update the module.
 
+The module does its work during the system boot. If your AdGuard certificate changes,
+you'll have to reboot the device for the new certificate to be copied to the system store.
+
 <details>
     <summary>Illustrated instruction</summary>
 
