@@ -11,14 +11,15 @@ MODDIR=${0%/*}
 #    Assuming the last installed AdGuard's cert is the correct one.
 # 2. Copy it to the system store under the name "<hash>.0".
 #    Apparently, some apps may ignore other certs.
-# 3. Remove the "<hash>.0" cert from the `cacerts-removed` directory.
-#    It might get there if it's "unchecked" in the security settings.
+# 3. Remove all certs with our hash from the `cacerts-removed` directory.
+#    They get there if a certificate is "disabled" in the security settings.
 #    Apps will reject certs that are in the `cacerts-removed`.
 AG_CERT_HASH=0f4ed297
 AG_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_CERT_HASH}.* | sort | tail -n1)
 cp -f ${AG_CERT_FILE} ${MODDIR}/system/etc/security/cacerts/${AG_CERT_HASH}.0
+rm -f /data/misc/user/*/cacerts-removed/${AG_CERT_HASH}.*
+
 chown -R 0:0 ${MODDIR}/system/etc/security/cacerts
-rm -f /data/misc/user/*/cacerts-removed/${AG_CERT_HASH}.0
 
 [ "$(getenforce)" = "Enforcing" ] || exit 0
 
