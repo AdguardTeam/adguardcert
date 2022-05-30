@@ -4,3 +4,4 @@ version=v1.2
 versionCode=3
 author=AdGuard
 description=Copies AdGuard's CA certificate from the user certificate store to the system store and forces Zygisk unmount procedures for certain browsers.
+updateJson=https://github.com/AdguardTeam/adguardcert/raw/master/update.json
