@@ -46,3 +46,4 @@
 "com.stoutner.privacybrowser.standard",
 "com.naver.whale",
 "us.spotco.mulch",
+"us.spotco.fennec_dos",
