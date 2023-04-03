@@ -15,11 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: setup ndk
-        uses: nttld/setup-ndk@v1.2.0
+      - name: Setup Android NDK >=23
+        uses: anoop-b/setup-ndk@V1.3.0
         id: setup-ndk
         with:
-          ndk-version: r23
+          ndk-version: r23c
           add-to-path: true
 
       - name: build dist
