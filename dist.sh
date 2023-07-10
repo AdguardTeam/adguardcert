@@ -1,27 +1,5 @@
 #!/bin/bash
 
-if [ -z "${ANDROID_HOME}" ]; then
-  echo "Specify the Android SDK directory through the ANDROID_HOME environment variable"
-  exit 1
-fi
-
-NDK_PATH=$(./ndk_path.py)
-
-if [ ! -d "${NDK_PATH}" ]; then
-  echo "NDK version ${NDK_VERSION} is required and was not found at ${NDK_PATH}"
-  exit 1
-fi
-
-NDK_BUILD="${NDK_PATH}/ndk-build"
-
-(cd ./zygisk_module && ${NDK_BUILD} -j8) || exit 1
-
-mkdir ./module/zygisk
-
-for i in $(ls ./zygisk_module/libs); do
-  cp -f ./zygisk_module/libs/$i/*.so ./module/zygisk/$i.so
-done
-
 UPDATE_BINARY_URL="https://raw.githubusercontent.com/topjohnwu/Magisk/master/scripts/module_installer.sh"
 
 mkdir -p ./module/META-INF/com/google/android

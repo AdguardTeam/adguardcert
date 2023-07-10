@@ -5,15 +5,31 @@ Based on [Move Certificates](https://github.com/Magisk-Modules-Repo/movecert).
 This Magisk module supplements [AdGuard for Android][agandroid] and allows installing
 AdGuard's CA certificate to the System store on rooted devices.
 
-## Why could you need it?
+## Explanation
+
+Chrome (and subsequently many other Chromium-based browsers)
+has recently started requiring Certificate Transparency logs
+for CA certs found in the **system certificate store**.
+
+If your device is rooted, and you want AdGuard's CA certificate to be installed
+in the **system store** , then AdGuard will generate two CA certificates and ask you
+to install both of them in the **user store**. This module moves one of them to the
+**system store**. The certificate that is left in the **user store** is cross-signed
+with the one that goes into the **system store**. This allows apps that don't trust
+user certificates to still accept AdGuard's certificate, while apps that do trust
+user certificates (like Chrome or other browsers) will construct a shorter validation
+path to the certificate stored in the **user store**. And since it is stored in the
+**user store**, they won't require CT logs.
+
+## Why would I want AdGuard's certificate in the system store?
 
 AdGuard for Android provides a feature called [HTTPS filtering][httpsfiltering]. It allows
 filtering of encrypted HTTPS traffic on your Android device. This feature requires
 adding the AdGuard's CA certificate to the list of trusted certificates.
 
 By default, on a non-rooted device only a limited subset of apps (mostly, browsers)
-trust the CA certificates installed to the **User store**. The only option to allow
-filtering of all other apps' traffic is to install the certificate to the **System store**.
+trust the CA certificates installed to the **user store**. The only option to allow
+filtering of all other apps' traffic is to install the certificate to the **system store**.
 Unfortunately, this is only possible on rooted devices.
 
 [agandroid]: https://adguard.com/adguard-android/overview.html
@@ -21,25 +37,18 @@ Unfortunately, this is only possible on rooted devices.
 
 ## Usage
 
-1. Enable HTTPS filtering in AdGuard for Android and save AdGuard's certificate to the User store.
-2. Go to *Magisk -> Settings* and enable **Zygisk**.
-3. Download the `.zip` file from the [latest release][latestrelease].
-4. Go to *Magisk -> Modules -> Install from storage* and select the downloaded `.zip` file.
-5. Reboot.
+1. Enable HTTPS filtering in AdGuard for Android and save AdGuard's certificate(s) to the User store
+2. Download the `.zip` file from the [latest release][latestrelease].
+3. Go to *Magisk -> Modules -> Install from storage* and select the downloaded `.zip` file.
+4. Reboot.
 
-If a new version comes out, repeat steps 3-5 to update the module.
+If a new version comes out, repeat steps 2-4 to update the module.
 
-The module does its work during the system boot. If your AdGuard certificate changes,
+The module does its work during the system boot. If your AdGuard certificate(s) change,
 you'll have to reboot the device for the new certificate to be copied to the system store.
 
 <details>
     <summary>Illustrated instruction</summary>
-
-![Open Magisk settings](https://user-images.githubusercontent.com/5947035/161061257-680c784b-b476-432d-8dfd-2528fe239346.png)
-
-![Enable Zygisk](https://user-images.githubusercontent.com/5947035/161061268-3367d668-cbbd-441d-9e6d-a4cbc3978b3e.png)
-
-![Go back to Magisk main screen](https://user-images.githubusercontent.com/5947035/161061273-329e3f8a-c957-4005-a8f7-2056b1866b08.png)
 
 ![Open Magisk modules](https://user-images.githubusercontent.com/5947035/161061277-1ada3a87-d0cb-44c0-9edd-77b00669759c.png)
 
@@ -51,7 +60,7 @@ you'll have to reboot the device for the new certificate to be copied to the sys
 
 </details>
 
-Please note that in order for **Bromite** browser to work properly, you need to set flag "Allow user certificates" in `chrome://flags` to "Enabled" state.
+Please note that in order for **Bromite** browser to work properly, you need to set the "Allow user certificates" flag in `chrome://flags` to "Enabled".
 
 <details>
     <summary>Bromite setup</summary>
@@ -62,39 +71,11 @@ Please note that in order for **Bromite** browser to work properly, you need to 
 
 [latestrelease]: https://github.com/AdguardTeam/adguardcert/releases/latest/
 
-## Chrome and Chromium-based browsers
-
-Chrome (and subsequently many other Chromium-based browsers)
-has recently started requiring CT logs for CA certs found in the **System store**.
-This module copies AdGuard's CA certificate from the **User store** to the **System store**.
-It also contains a Zygisk module that reverts any modifications done by Magisk for
-[certain browsers](./zygisk_module/jni/browsers.inc).
-This way the browsers only find AdGuard's certificate in the User store
-and don't complain about the missing CT log, while other apps continue to use the
-same certificate from the System store.
-
 ## Building
-
-Update git modules:
-
 ```shell
-git submodule init && git submodule update
-```
-
-You'll need an Android SDK with NDK installed (tested with NDK 22 and 23). Run:
-
-```shell
-ANDROID_HOME=<path-to-android-sdk> ./dist.sh
+./dist.sh
 ```
 
 How to release a new version:
 1. Push a new tag with a name like `v*`.
 2. A new release will be automatically created.
-
-## Advanced
-
-If you prefer to manage your Zygisk denylist yourself, simply remove the Zygisk part of the module:
-
-```shell
-zip adguardcert-v1.0.zip -d "zygisk/*"
-```
