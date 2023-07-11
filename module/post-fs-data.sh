@@ -23,7 +23,7 @@ AG_INTERMEDIATE_CERT_HASH=47ec1af8
 AG_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_CERT_HASH}.* | sort | tail -n1)
 AG_INTERMEDIATE_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_INTERMEDIATE_CERT_HASH}.* | sort | tail -n1)
 
-if [ -e "${AG_INTERMEDIATE_CERT_FILE}" ]; then
+if [ -e "${AG_CERT_FILE}" ] && [ -e "${AG_INTERMEDIATE_CERT_FILE}" ]; then
     cp -f ${AG_CERT_FILE} ${MODDIR}/system/etc/security/cacerts/${AG_CERT_HASH}.0
     rm -f /data/misc/user/*/cacerts-removed/${AG_CERT_HASH}.*
 fi
