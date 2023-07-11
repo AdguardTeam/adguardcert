@@ -16,8 +16,15 @@ MODDIR=${0%/*}
 #    They get there if a certificate is "disabled" in the security settings.
 #    Apps will reject certs that are in the `cacerts-removed`.
 AG_CERT_HASH=0f4ed297
+AG_INTERMEDIATE_CERT_HASH=47ec1af8
 AG_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_CERT_HASH}.* | sort | tail -n1)
-mv -f ${AG_CERT_FILE} ${MODDIR}/system/etc/security/cacerts/${AG_CERT_HASH}.0
+AG_INTERMEDIATE_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_INTERMEDIATE_CERT_HASH}.* | sort | tail -n1)
+
+if [ ! -e "${AG_INTERMEDIATE_CERT_FILE}" ]; then
+    exit 1
+fi
+
+cp -f ${AG_CERT_FILE} ${MODDIR}/system/etc/security/cacerts/${AG_CERT_HASH}.0
 rm -f /data/misc/user/*/cacerts-removed/${AG_CERT_HASH}.*
 
 chown -R 0:0 ${MODDIR}/system/etc/security/cacerts
