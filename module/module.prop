@@ -1,6 +1,6 @@
 id=adguardcert
 name=AdGuard Certificate
-version=v2.0-beta2
-versionCode=31
+version=v2.0-beta3
+versionCode=32
 author=AdGuard
 description=Moves AdGuard's root CA certificate from the user certificate store to the system certificate store.

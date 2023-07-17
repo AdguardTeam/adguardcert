@@ -20,8 +20,8 @@ MODDIR=${0%/*}
 #    Apps will reject certs that are in the `cacerts-removed`.
 AG_CERT_HASH=0f4ed297
 AG_INTERMEDIATE_CERT_HASH=47ec1af8
-AG_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_CERT_HASH}.* | sort | tail -n1)
-AG_INTERMEDIATE_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_INTERMEDIATE_CERT_HASH}.* | sort | tail -n1)
+AG_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_CERT_HASH}.* | (IFS=.; while read -r left right; do echo $right $left.$right; done) | sort -nr | (read -r left right; echo $right))
+AG_INTERMEDIATE_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_INTERMEDIATE_CERT_HASH}.* | (IFS=.; while read -r left right; do echo $right $left.$right; done) | sort -nr | (read -r left right; echo $right))
 
 if [ -e "${AG_CERT_FILE}" ] && [ -e "${AG_INTERMEDIATE_CERT_FILE}" ]; then
     cp -f ${AG_CERT_FILE} ${MODDIR}/system/etc/security/cacerts/${AG_CERT_HASH}.0
