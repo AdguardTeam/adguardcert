@@ -61,7 +61,7 @@ if [ -e /apex/com.android.conscrypt/cacerts ]; then
     set_context /apex/com.android.conscrypt/cacerts /data/local/tmp/tmp-ca-copy
 
     # Mount directory inside APEX if it is valid, and remove temporary one.
-    CERTS_NUM="$(ls -1 /apex/com.android.conscrypt/cacerts | wc -l)"
+    CERTS_NUM="$(ls -1 /data/local/tmp/tmp-ca-copy | wc -l)"
     if [ "$CERTS_NUM" -gt 10 ]; then
         mount --bind /data/local/tmp/tmp-ca-copy /apex/com.android.conscrypt/cacerts
     else
