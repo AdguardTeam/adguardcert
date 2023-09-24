@@ -51,9 +51,10 @@ set_context /system/etc/security/cacerts $MODDIR/system/etc/security/cacerts
 # Since Magisk ignore /apex for module file injections, use non-Magisk way
 if [ -e /apex/com.android.conscrypt/cacerts ]; then
     # Clone directory into tmpfs
-    mkdir -p /data/local/tmp-ca-copy
+    rm -f /data/local/tmp/tmp-ca-copy
+    mkdir -p /data/local/tmp/tmp-ca-copy
     mount -t tmpfs tmpfs /data/local/tmp/tmp-ca-copy
-    cp -f /apex/com.android.conscrypt/cacerts/* /data/local/tmp/tmp-ca-copy
+    cp -f /apex/com.android.conscrypt/cacerts/* /data/local/tmp/tmp-ca-copy/
 
     # Do the same as in Magisk module
     cp -f ${AG_CERT_FILE} /data/local/tmp/tmp-ca-copy
