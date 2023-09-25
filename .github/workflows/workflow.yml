@@ -32,7 +32,7 @@ jobs:
       - name: write PR url
         if: github.event_name == 'pull_request'
         run: |
-          echo "{{ github.event.pull_request.html_url }}" > pull_request_url.txt
+          echo "${{ github.event.pull_request.html_url }}" > pull_request_url.txt
 
       - name: upload artifact
         uses: actions/upload-artifact@v3
@@ -40,6 +40,6 @@ jobs:
         with:
           name: adguardcert module build
           path: |
-            "adguardcert-*.zip"
+            adguardcert-*.zip
             README.md
             pull_request_url.txt
