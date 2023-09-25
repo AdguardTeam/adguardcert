@@ -28,3 +28,10 @@ jobs:
           artifacts: "adguardcert-*.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
           generateReleaseNotes: true
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v3
+        if: github.event_name == 'pull_request'
+        with:
+          name: module build
+          path: "adguardcert-*.zip"
