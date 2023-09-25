@@ -33,5 +33,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: github.event_name == 'pull_request'
         with:
-          name: module build
+          name: module zip
           path: "adguardcert-*.zip"
