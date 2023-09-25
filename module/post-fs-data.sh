@@ -45,11 +45,11 @@ rm -f /data/misc/user/*/cacerts-removed/${AG_CERT_HASH}.*
 
 cp -f ${AG_CERT_FILE} ${MODDIR}/system/etc/security/cacerts/${AG_CERT_HASH}.0
 chown -R 0:0 ${MODDIR}/system/etc/security/cacerts
-set_context /system/etc/security/cacerts $MODDIR/system/etc/security/cacerts
+set_context /system/etc/security/cacerts ${MODDIR}/system/etc/security/cacerts
 
 # Android 14 support
 # Since Magisk ignore /apex for module file injections, use non-Magisk way
-if [ -e /apex/com.android.conscrypt/cacerts ]; then
+if [ -d /apex/com.android.conscrypt/cacerts ]; then
     # Clone directory into tmpfs
     rm -f /data/local/tmp/tmp-ca-copy
     mkdir -p /data/local/tmp/tmp-ca-copy
