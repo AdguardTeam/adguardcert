@@ -51,23 +51,23 @@ set_context /system/etc/security/cacerts ${MODDIR}/system/etc/security/cacerts
 # Since Magisk ignore /apex for module file injections, use non-Magisk way
 if [ -d /apex/com.android.conscrypt/cacerts ]; then
     # Clone directory into tmpfs
-    rm -f /data/local/tmp/tmp-ca-copy
-    mkdir -p /data/local/tmp/tmp-ca-copy
-    mount -t tmpfs tmpfs /data/local/tmp/tmp-ca-copy
-    cp -f /apex/com.android.conscrypt/cacerts/* /data/local/tmp/tmp-ca-copy/
+    rm -f /data/local/tmp/adg-ca-copy
+    mkdir -p /data/local/tmp/adg-ca-copy
+    mount -t tmpfs tmpfs /data/local/tmp/adg-ca-copy
+    cp -f /apex/com.android.conscrypt/cacerts/* /data/local/tmp/adg-ca-copy/
 
     # Do the same as in Magisk module
-    cp -f ${AG_CERT_FILE} /data/local/tmp/tmp-ca-copy
-    chown -R 0:0 /data/local/tmp/tmp-ca-copy
-    set_context /apex/com.android.conscrypt/cacerts /data/local/tmp/tmp-ca-copy
+    cp -f ${AG_CERT_FILE} /data/local/tmp/adg-ca-copy
+    chown -R 0:0 /data/local/tmp/adg-ca-copy
+    set_context /apex/com.android.conscrypt/cacerts /data/local/tmp/adg-ca-copy
 
     # Mount directory inside APEX if it is valid, and remove temporary one.
-    CERTS_NUM="$(ls -1 /data/local/tmp/tmp-ca-copy | wc -l)"
+    CERTS_NUM="$(ls -1 /data/local/tmp/adg-ca-copy | wc -l)"
     if [ "$CERTS_NUM" -gt 10 ]; then
-        mount --bind /data/local/tmp/tmp-ca-copy /apex/com.android.conscrypt/cacerts
+        mount --bind /data/local/tmp/adg-ca-copy /apex/com.android.conscrypt/cacerts
     else
         echo "Cancelling replacing CA storage due to safety"
     fi
-    umount /data/local/tmp/tmp-ca-copy
-    rmdir /data/local/tmp/tmp-ca-copy
+    umount /data/local/tmp/adg-ca-copy
+    rmdir /data/local/tmp/adg-ca-copy
 fi
