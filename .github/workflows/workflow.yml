@@ -29,9 +29,17 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           generateReleaseNotes: true
 
+      - name: write PR url
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "{{ github.event.pull_request.html_url }}" > pull_request_url.txt
+
       - name: upload artifact
         uses: actions/upload-artifact@v3
         if: github.event_name == 'pull_request'
         with:
-          name: module zip
-          path: "adguardcert-*.zip"
+          name: adguardcert module build
+          path: |
+            "adguardcert-*.zip"
+            README.md
+            pull_request_url.txt
