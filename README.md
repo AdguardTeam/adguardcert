@@ -7,7 +7,7 @@ AdGuard's CA certificate to the System store on rooted devices.
 
 **Attention**
 If you're using AdGuard for Android v4.2 Nightly 10 or newer, use the beta version of
-this magisk module: https://github.com/AdguardTeam/adguardcert/releases/tag/v2.0-beta4.
+this magisk module: https://github.com/AdguardTeam/adguardcert/releases/tag/v2.0-beta5.
 
 ## Explanation
 
