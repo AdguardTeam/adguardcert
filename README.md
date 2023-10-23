@@ -6,7 +6,8 @@ This Magisk module supplements [AdGuard for Android][agandroid] and allows insta
 AdGuard's CA certificate to the System store on rooted devices.
 
 **Attention**
-Current version of this module is designed for Adguard for Android 4.2 and newer.
+[Current version](https://github.com/AdguardTeam/adguardcert/releases/latest)
+of this module is designed for Adguard for Android 4.2 and newer.
 
 If you're using AdGuard for Android v4.1 or older, please use the earlier version of
 this magisk module: https://github.com/AdguardTeam/adguardcert/releases/tag/v1.2.
