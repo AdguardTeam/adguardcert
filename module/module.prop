@@ -4,3 +4,4 @@ version=v2.0
 versionCode=35
 author=AdGuard
 description=Moves AdGuard's root CA certificate from the user certificate store to the system certificate store.
+updateJson=https://raw.githubusercontent.com/AdguardTeam/adguardcert/master/update.json
