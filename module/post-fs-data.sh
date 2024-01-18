@@ -57,7 +57,7 @@ if [ -d /apex/com.android.conscrypt/cacerts ]; then
     cp -f /apex/com.android.conscrypt/cacerts/* /data/local/tmp/adg-ca-copy/
 
     # Do the same as in Magisk module
-    cp -f ${AG_CERT_FILE} /data/local/tmp/adg-ca-copy
+    cp -f ${AG_CERT_FILE} /data/local/tmp/adg-ca-copy/${AG_CERT_HASH}.0
     chown -R 0:0 /data/local/tmp/adg-ca-copy
     set_context /apex/com.android.conscrypt/cacerts /data/local/tmp/adg-ca-copy
 
@@ -65,6 +65,10 @@ if [ -d /apex/com.android.conscrypt/cacerts ]; then
     CERTS_NUM="$(ls -1 /data/local/tmp/adg-ca-copy | wc -l)"
     if [ "$CERTS_NUM" -gt 10 ]; then
         mount --bind /data/local/tmp/adg-ca-copy /apex/com.android.conscrypt/cacerts
+        for pid in 1 $(pgrep zygote) $(pgrep zygote64); do
+            nsenter --mount=/proc/${pid}/ns/mnt -- \
+                /bin/mount --bind /data/local/tmp/adg-ca-copy /apex/com.android.conscrypt/cacerts
+        done
     else
         echo "Cancelling replacing CA storage due to safety"
     fi
