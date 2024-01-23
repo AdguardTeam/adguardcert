@@ -20,6 +20,6 @@ case version in
 EOF
     )
     git add update.json
-    git commit -m "skipci: Update update.json"
+    git commit -m "skipci: Update update.json" || true
     ;;
 esac
