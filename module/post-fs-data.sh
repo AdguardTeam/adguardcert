@@ -38,6 +38,10 @@ AG_CERT_HASH=0f4ed297
 AG_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_CERT_HASH}.* | (IFS=.; while read -r left right; do echo $right $left.$right; done) | sort -nr | (read -r left right; echo $right))
 
 if ! [ -e "${AG_CERT_FILE}" ]; then
+    # Drop the certificates staged on the previous boot so a removed
+    # certificate is not kept alive in the system and APEX stores.
+    rm -rf ${MODDIR}/apex-cacerts
+    rm -f ${MODDIR}/system/etc/security/cacerts/${AG_CERT_HASH}.*
     exit 0
 fi
 
