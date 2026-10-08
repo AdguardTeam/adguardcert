@@ -1,6 +1,6 @@
 #!/bin/bash
 
-case version in
+case $version in
 *-*)
     ;;
 *)
