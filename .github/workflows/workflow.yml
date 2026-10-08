@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
       - name: build dist
         run: |
@@ -35,7 +35,7 @@ jobs:
           echo "${{ github.event.pull_request.html_url }}" > pull_request_url.txt
 
       - name: upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         if: github.event_name == 'pull_request'
         with:
           name: adguardcert module build
