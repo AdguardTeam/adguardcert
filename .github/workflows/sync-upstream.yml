@@ -1,8 +1,7 @@
 name: Sync Upstream
 
+# Automatic triggers paused at the owner's request on 2026-10-17.
 on:
-  schedule:
-    - cron: "10 6 * * *"
   workflow_dispatch:
 
 permissions:
