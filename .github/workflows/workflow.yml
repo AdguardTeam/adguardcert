@@ -1,19 +1,40 @@
 name: Build and deploy
 
+# Automatic triggers paused at the owner's request on 2026-10-17.
 on:
-  push:
-    branches:
-      - "*"
-    tags:
-      - v*
-  pull_request:
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: install validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y busybox-static shellcheck
+
+      - name: validate shell syntax
+        run: |
+          sh -n module/*.sh tests/*.sh
+          busybox sh -n module/*.sh tests/*.sh
+
+      - name: run shellcheck
+        run: shellcheck -x -s sh -e SC1090,SC1091,SC2012,SC2034 module/*.sh tests/*.sh
+
+      - name: validate line endings
+        run: |
+          bad=$(git grep -Il $'\r' -- module tests .github/workflows README.md || true)
+          if [ -n "$bad" ]; then
+            echo "$bad"
+            exit 1
+          fi
+
+      - name: run mocked module tests
+        run: |
+          sh tests/test_staging.sh
+          sh tests/test_hybrid_registration.sh
 
       - name: build dist
         run: |
@@ -34,8 +55,8 @@ jobs:
         run: |
           echo "${{ github.event.pull_request.html_url }}" > pull_request_url.txt
 
-      - name: upload artifact
-        uses: actions/upload-artifact@v3
+      - name: upload PR artifact
+        uses: actions/upload-artifact@v4
         if: github.event_name == 'pull_request'
         with:
           name: adguardcert module build
@@ -44,10 +65,19 @@ jobs:
             README.md
             pull_request_url.txt
 
+      - name: upload build artifact
+        uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/v'))
+        with:
+          name: adguardcert module build
+          path: |
+            adguardcert-*.zip
+            README.md
+
       - name: update json
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-')
         run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com>"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git fetch origin
           ./update.sh

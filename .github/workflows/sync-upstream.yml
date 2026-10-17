@@ -1,0 +1,129 @@
+name: Sync Upstream
+
+# Automatic triggers paused at the owner's request on 2026-10-17.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/AdguardTeam/adguardcert.git || true
+
+      - name: Fetch upstream
+        run: git fetch upstream master --tags
+
+      - name: Check for upstream commits
+        id: check
+        run: |
+          BEHIND=$(git rev-list HEAD..upstream/master --count)
+          echo "behind=$BEHIND" >> "$GITHUB_OUTPUT"
+          echo "Upstream is $BEHIND commit(s) ahead"
+
+      - name: Capture fork baseline
+        id: base
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Merge upstream
+        if: steps.check.outputs.behind != '0'
+        run: |
+          git merge upstream/master --no-edit -X ours || {
+            git diff --name-only --diff-filter=U > conflicts.txt
+            while IFS= read -r path; do
+              [ -n "$path" ] || continue
+              case "$path" in
+                .github/workflows/*)
+                  git restore --source="${{ steps.base.outputs.sha }}" --staged --worktree -- "$path" 2>/dev/null || git rm -f -- "$path"
+                  ;;
+                *)
+                  git checkout --ours -- "$path" 2>/dev/null || git rm -f -- "$path"
+                  ;;
+              esac
+            done < conflicts.txt
+            rm -f conflicts.txt
+            git add -A
+            git commit --no-edit
+          }
+
+      - name: Restore fork workflows
+        if: steps.check.outputs.behind != '0'
+        run: |
+          git restore --source="${{ steps.base.outputs.sha }}" --staged --worktree .github/workflows || true
+          if ! git diff --quiet -- .github/workflows; then
+            git add .github/workflows
+            git commit -m "chore: preserve fork workflows after upstream sync"
+          fi
+
+      - name: Push synced branch
+        if: steps.check.outputs.behind != '0'
+        run: git push origin master
+
+      - name: Compute fork build version
+        if: steps.check.outputs.behind != '0'
+        id: version
+        run: |
+          RAW_VERSION=$(sed -ne 's/^version=//p' module/module.prop)
+          BASE_VERSION=${RAW_VERSION%%-fork.*}
+          BUILD_COUNT=$(git rev-list --count HEAD)
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          VERSION="${BASE_VERSION}-fork.${BUILD_COUNT}.${SHORT_SHA}"
+          VERSION_CODE=$((BUILD_COUNT + 1000))
+          sed -i "s/^version=.*/version=${VERSION}/" module/module.prop
+          sed -i "s/^versionCode=.*/versionCode=${VERSION_CODE}/" module/module.prop
+          cat > update.json <<EOF
+          {
+            "version": "${VERSION}",
+            "versionCode": ${VERSION_CODE},
+            "zipUrl": "https://github.com/larsmartens/adguardcert/releases/download/${VERSION}/adguardcert-${VERSION}.zip",
+            "changelog": "https://raw.githubusercontent.com/larsmartens/adguardcert/master/changelog.md"
+          }
+          EOF
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Commit fork build metadata
+        if: steps.check.outputs.behind != '0'
+        run: |
+          git add module/module.prop update.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: prepare fork module metadata"
+            git push origin master
+          fi
+
+      - name: Build module zip
+        if: steps.check.outputs.behind != '0'
+        run: ./dist.sh
+
+      - name: Upload build artifact
+        if: steps.check.outputs.behind != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: adguardcert-sync-build
+          path: adguardcert-*.zip
+
+      - name: Create release
+        if: steps.check.outputs.behind != '0'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: AdGuard Certificate ${{ steps.version.outputs.version }}
+          prerelease: true
+          make_latest: true
+          files: adguardcert-*.zip
