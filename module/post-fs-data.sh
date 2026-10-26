@@ -69,6 +69,7 @@ if [ -d /apex/com.android.conscrypt/cacerts ]; then
     if [ "$CERTS_NUM" -gt 10 ]; then
         mount --bind ${MODDIR}/apex-cacerts /apex/com.android.conscrypt/cacerts
         for pid in 1 $(pgrep zygote) $(pgrep zygote64); do
+            grep -Fq " /apex/com.android.conscrypt/cacerts " /proc/${pid}/mountinfo 2>/dev/null && continue
             nsenter --mount=/proc/${pid}/ns/mnt -- \
                 /bin/mount --bind ${MODDIR}/apex-cacerts /apex/com.android.conscrypt/cacerts
         done
