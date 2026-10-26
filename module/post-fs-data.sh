@@ -38,6 +38,10 @@ AG_CERT_HASH=0f4ed297
 AG_CERT_FILE=$(ls /data/misc/user/*/cacerts-added/${AG_CERT_HASH}.* | (IFS=.; while read -r left right; do echo $right $left.$right; done) | sort -nr | (read -r left right; echo $right))
 
 if ! [ -e "${AG_CERT_FILE}" ]; then
+    # Drop the certificates staged on the previous boot so a removed
+    # certificate is not kept alive in the system and APEX stores.
+    rm -rf ${MODDIR}/apex-cacerts
+    rm -f ${MODDIR}/system/etc/security/cacerts/${AG_CERT_HASH}.*
     exit 0
 fi
 
@@ -50,28 +54,27 @@ set_context /system/etc/security/cacerts ${MODDIR}/system/etc/security/cacerts
 # Android 14 support
 # Since Magisk ignore /apex for module file injections, use non-Magisk way
 if [ -d /apex/com.android.conscrypt/cacerts ]; then
-    # Clone directory into tmpfs
-    rm -f /data/local/tmp/adg-ca-copy
-    mkdir -p /data/local/tmp/adg-ca-copy
-    mount -t tmpfs tmpfs /data/local/tmp/adg-ca-copy
-    cp -f /apex/com.android.conscrypt/cacerts/* /data/local/tmp/adg-ca-copy/
+    # Clone directory into the module folder
+    rm -rf ${MODDIR}/apex-cacerts
+    mkdir -p ${MODDIR}/apex-cacerts
+    cp -f /apex/com.android.conscrypt/cacerts/* ${MODDIR}/apex-cacerts/
 
     # Do the same as in Magisk module
-    cp -f ${AG_CERT_FILE} /data/local/tmp/adg-ca-copy/${AG_CERT_HASH}.0
-    chown -R 0:0 /data/local/tmp/adg-ca-copy
-    set_context /apex/com.android.conscrypt/cacerts /data/local/tmp/adg-ca-copy
+    cp -f ${AG_CERT_FILE} ${MODDIR}/apex-cacerts/${AG_CERT_HASH}.0
+    chown -R 0:0 ${MODDIR}/apex-cacerts
+    set_context /apex/com.android.conscrypt/cacerts ${MODDIR}/apex-cacerts
 
-    # Mount directory inside APEX if it is valid, and remove temporary one.
-    CERTS_NUM="$(ls -1 /data/local/tmp/adg-ca-copy | wc -l)"
+    # Mount directory inside APEX if it is valid.
+    CERTS_NUM="$(ls -1 ${MODDIR}/apex-cacerts | wc -l)"
     if [ "$CERTS_NUM" -gt 10 ]; then
-        mount --bind /data/local/tmp/adg-ca-copy /apex/com.android.conscrypt/cacerts
+        mount --bind ${MODDIR}/apex-cacerts /apex/com.android.conscrypt/cacerts
         for pid in 1 $(pgrep zygote) $(pgrep zygote64); do
+            grep -Fq " /apex/com.android.conscrypt/cacerts " /proc/${pid}/mountinfo 2>/dev/null && continue
             nsenter --mount=/proc/${pid}/ns/mnt -- \
-                /bin/mount --bind /data/local/tmp/adg-ca-copy /apex/com.android.conscrypt/cacerts
+                /bin/mount --bind ${MODDIR}/apex-cacerts /apex/com.android.conscrypt/cacerts
         done
     else
         echo "Cancelling replacing CA storage due to safety"
+        rm -rf ${MODDIR}/apex-cacerts
     fi
-    umount /data/local/tmp/adg-ca-copy
-    rmdir /data/local/tmp/adg-ca-copy
 fi
