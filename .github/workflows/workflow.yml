@@ -12,6 +12,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
 
@@ -46,10 +49,24 @@ jobs:
 
       - name: update json
         if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com>"
           git config user.name "github-actions[bot]"
           git fetch origin
           ./update.sh
-          git push origin master
+          if git diff --quiet origin/master HEAD; then
+            echo "update.json is already up to date"
+            exit 0
+          fi
+          branch="update-json/${GITHUB_REF_NAME}"
+          git checkout -b "${branch}"
+          git push --force origin "${branch}"
+          gh pr create \
+            --base master \
+            --head "${branch}" \
+            --title "Update update.json for ${GITHUB_REF_NAME}" \
+            --body "Automated update.json update for the ${GITHUB_REF_NAME} release." \
+            || echo "Pull request for ${branch} already exists"
           ls -la
